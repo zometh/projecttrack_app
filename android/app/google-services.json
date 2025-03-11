@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658473221492",
+    "project_id": "projecttrack-761b8",
+    "storage_bucket": "projecttrack-761b8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658473221492:android:1142812eafa6ea8959c021",
+        "android_client_info": {
+          "package_name": "com.zomethdev.projecttrack.diop_mouhamed_l3gl_examen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNF31kCMW9GByn8Cy055ythQD2pqXaYFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

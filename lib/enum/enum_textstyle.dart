@@ -1,0 +1,1 @@
+enum CustomTextStyle{primary, secondary}
