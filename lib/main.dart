@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toastification/toastification.dart';
 
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
@@ -31,16 +32,18 @@ class MyApp extends StatelessWidget {
      
       minTextAdapt: true,
       designSize: const Size(375, 804),
-      child: GetMaterialApp(
-      builder: (_, child) {
-            return ScaffoldMessenger(child: child!);
-          },
-        debugShowCheckedModeBanner: false,
- title: 'Project Track',
-      defaultTransition: Transition.cupertino,
-      theme: ThemeConfig.lightTheme,
-      darkTheme: ThemeConfig.darkTheme,
-      home: const SpalshScreen(),
+      child: ToastificationWrapper(
+        child: GetMaterialApp(
+        builder: (_, child) {
+              return ScaffoldMessenger(child: child!);
+            },
+          debugShowCheckedModeBanner: false,
+         title: 'Project Track',
+        defaultTransition: Transition.cupertino,
+        theme: ThemeConfig.lightTheme,
+        darkTheme: ThemeConfig.darkTheme,
+        home: const SpalshScreen(),
+        ),
       ),
     );
   }

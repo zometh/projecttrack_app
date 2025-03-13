@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-
+import 'package:get/get.dart';
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -11,6 +11,17 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(
+          onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            Get.back();
+          },
+          child: Text("disconnect"),
+        ),
+      ],
+    );
   }
 }

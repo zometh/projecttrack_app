@@ -6,10 +6,14 @@ import 'package:diop_mouhamed_l3gl_examen/utils/form_validator.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_textfield.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+
+import '../controllers/register_controller.dart';
+import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,6 +25,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController email;
   late TextEditingController password;
+  bool _isLoading = false;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   @override
   void initState() {
@@ -65,22 +70,51 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 16,
                 ),
                 CustomTextField(
-                                    validator: (value) => FormValidator.isValidMail(value!),
+                  validator: (value) => FormValidator.isValidMail(value!),
 
-                  controller: email, hintText: "Adresse email"),
+                  controller: email,
+                  hintText: "Adresse email",
+                ),
                 CustomTextField(
                   validator: (value) => FormValidator.isValidPassword(value!),
                   controller: password,
                   hintText: "Mot de passe",
                   type: TextFieldType.password,
                 ),
-                CustomButton(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () => Get.to(() => const RegisterPage()),
+                      child: CustomText(
+                        text: "Mot de passe oublié ?",
+                        color: kprimary,
+                      ),
+                    ),
+                  ],
+                ),
+                _isLoading ? loadingComponent : CustomButton(
                   text: "Se connecter",
-                  onPressed: () {
-                    if (_key.currentState!.validate()) {
-                      Get.snackbar("info", "validate");
-                    }
-                  },
+                  onPressed: login,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      text: "Vous n'avez pas de compte? ",
+                      fontSize: 14,
+                    ),
+                    InkWell(
+                      onTap: () => Get.to(() => const RegisterPage()),
+                      child: CustomText(
+                        text: "S'inscrire",
+                        color: kprimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        customStyle: CustomTextStyle.secondary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -88,5 +122,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+  login()async {
+    if (_key.currentState!.validate()) {
+      Get.focusScope!.unfocus();
+      setState(() {
+        _isLoading = true;
+      });
+      String strEmail = email.text.trim();
+
+      String strPassword = password.text.trim();
+      try {
+        AuthController controller = Get.put(AuthController());
+        controller.updateLoginValue(strEmail, strPassword);
+        await AuthService().signIn().then((value) {
+          //Get.back();
+        });
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        debugPrint(e.toString());
+      }finally{
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }
