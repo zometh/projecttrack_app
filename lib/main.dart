@@ -9,40 +9,37 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
-void main() async{
-   WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
- 
 
   await Supabase.initialize(
-      url: dotenv.env["SUPABASE_URL"]!, anonKey: dotenv.env["ANON_KEY"]!);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    url: dotenv.env["SUPABASE_URL"]!,
+    anonKey: dotenv.env["ANON_KEY"]!,
   );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-     
       minTextAdapt: true,
-      designSize: const Size(375, 804),
+      designSize: const Size(360, 758),
       child: ToastificationWrapper(
         child: GetMaterialApp(
-        builder: (_, child) {
-              return ScaffoldMessenger(child: child!);
-            },
+          builder: (_, child) {
+            return ScaffoldMessenger(child: child!);
+          },
           debugShowCheckedModeBanner: false,
-         title: 'Project Track',
-        defaultTransition: Transition.cupertino,
-        theme: ThemeConfig.lightTheme,
-        darkTheme: ThemeConfig.darkTheme,
-        home: const SpalshScreen(),
+          title: 'Project Track',
+          defaultTransition: Transition.cupertino,
+          theme: ThemeConfig.lightTheme,
+          darkTheme: ThemeConfig.darkTheme,
+          home: const SpalshScreen(),
         ),
       ),
     );
@@ -57,4 +54,3 @@ class MyApp extends StatelessWidget {
     )
 
  */
-

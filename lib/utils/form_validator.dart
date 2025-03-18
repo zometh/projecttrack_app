@@ -10,8 +10,13 @@ class FormValidator {
     return null;
   }
 
-  static bool isValidField(String input) {
-    return false;
+  static String? isValidField({required String input, int nbCar = 5}) {
+    if (input.isEmpty) {
+      return "Champs requis";
+    } else if (input.length < nbCar) {
+      return "Le champs doit contenir au moins $nbCar caractères ! ";
+    }
+    return null;
   }
 
   static String? isValidPassword(String pwd) {

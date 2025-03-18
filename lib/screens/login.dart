@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 CustomTextField(
                   validator: (value) => FormValidator.isValidMail(value!),
-
+                  prefixIcon: Icons.mail,
                   controller: email,
                   hintText: "Adresse email",
                 ),
@@ -79,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   validator: (value) => FormValidator.isValidPassword(value!),
                   controller: password,
                   hintText: "Mot de passe",
+                  prefixIcon: Icons.lock,
                   type: TextFieldType.password,
                 ),
                 Row(
@@ -93,10 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                _isLoading ? loadingComponent : CustomButton(
-                  text: "Se connecter",
-                  onPressed: login,
-                ),
+                _isLoading
+                    ? loadingComponent
+                    : CustomButton(text: "Se connecter", onPressed: login),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -123,7 +123,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  login()async {
+
+  login() async {
     if (_key.currentState!.validate()) {
       Get.focusScope!.unfocus();
       setState(() {
@@ -143,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
         debugPrint(e.toString());
-      }finally{
+      } finally {
         setState(() {
           _isLoading = false;
         });

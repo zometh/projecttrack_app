@@ -92,6 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: CustomText(text: "Choisir une photo", fontSize: 12),
                   ),
                   CustomTextField(
+                    prefixIcon: Icons.person,
                     validator:
                         (value) => FormValidator.isValidFullName(value!.trim()),
 
@@ -99,6 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintText: "Nom complet",
                   ),
                   CustomTextField(
+                    prefixIcon: Icons.mail,
                     validator:
                         (value) => FormValidator.isValidMail(value!.trim()),
 
@@ -106,6 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintText: "Adresse email",
                   ),
                   CustomTextField(
+                    prefixIcon: Icons.lock,
                     validator:
                         (value) => FormValidator.isValidPassword(value!.trim()),
                     controller: password,
@@ -113,6 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     type: TextFieldType.password,
                   ),
                   CustomTextField(
+                    prefixIcon: Icons.lock,
                     validator:
                         (value) => FormValidator.isValidPassword(value!.trim()),
                     controller: passwordConfirm,

@@ -50,7 +50,7 @@ class CustomText extends StatelessWidget {
 class CustomText extends StatelessWidget {
   final String text;
   final double fontSize;
-  final Color? color; // Make color nullable to use theme default
+  final Color? color;
   final CustomTextStyle customStyle;
   final FontWeight fontWeight;
   final bool adaptColor;
@@ -73,19 +73,16 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get colors from theme
     Color textColor =
         color ??
         Theme.of(context).textTheme.bodyLarge?.color ??
         ktextPrimaryLight;
 
-    // Apply adaptive coloring if needed
     if (adaptColor && color == null) {
       bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
       textColor = isDarkMode ? ktextPrimaryDark : ktextPrimaryLight;
     }
 
-    // Use ScreenUtil for responsive font sizing
     final responsiveFontSize = fontSize.sp;
 
     return Text(
@@ -97,7 +94,7 @@ class CustomText extends StatelessWidget {
                 color: textColor,
                 fontWeight: fontWeight,
               )
-              : GoogleFonts.inter(
+              : GoogleFonts.roboto(
                 fontSize: responsiveFontSize,
                 color: textColor,
                 fontWeight: fontWeight,

@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
@@ -12,7 +10,9 @@ class CustomTextField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final TextInputFormatter? formatter;
   final bool filled;
-
+  final IconData? prefixIcon;
+  final double borderRadius;
+  final int maxLines;
   const CustomTextField({
     super.key,
     required this.controller,
@@ -21,6 +21,8 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.formatter,
     this.filled = true,
+    this.prefixIcon,
+    this.borderRadius = 15,  this.maxLines = 1,
   });
 
   @override
@@ -36,49 +38,37 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    // Couleurs adaptatives en fonction du thème
-    final fillColor = isDark
-        ? Color(0xFF2A2A2A) // Gris foncé pour le mode sombre
-        : Colors.grey.shade200; // Gris clair pour le mode clair
+    final fillColor = isDark ? Color(0xFF2A2A2A) : Colors.grey.shade200;
 
-    final borderColor = isDark
-        ? Colors.grey.shade800 // Bordure plus visible en mode sombre
-        : Colors.white; // Bordure blanche en mode clair
+    final borderColor = isDark ? Colors.grey.shade800 : Colors.white;
 
-    final focusedBorderColor = isDark
-        ? theme.colorScheme.primary // Couleur primaire en mode sombre
-        : Colors.grey.shade400; // Gris en mode clair
+    final focusedBorderColor =
+        isDark ? theme.colorScheme.primary : Colors.grey.shade400;
 
-    final hintColor = isDark
-        ? Colors.grey.shade400 // Texte d'indication plus visible en mode sombre
-        : Colors.grey.shade500; // Texte d'indication standard en mode clair
+    final hintColor = isDark ? Colors.grey.shade400 : Colors.grey.shade500;
 
     return TextFormField(
+      maxLines: widget.maxLines,
       controller: widget.controller,
       validator: widget.validator,
       obscureText: widget.type == TextFieldType.password && isHidden,
       inputFormatters: widget.formatter != null ? [widget.formatter!] : null,
-      style: TextStyle(
-        color: isDark
-            ? Colors.white
-            : Colors.black87, // Couleur du texte adaptative
-      ),
-      onChanged: widget.type == TextFieldType.password
-          ? (value) => setState(() => textLength = value.length)
-          : null,
+      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+      onChanged:
+          widget.type == TextFieldType.password
+              ? (value) => setState(() => textLength = value.length)
+              : null,
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: TextStyle(color: hintColor),
         filled: widget.filled,
         fillColor: widget.filled ? fillColor : null,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(
-            color: borderColor,
-          ),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          borderSide: BorderSide(color: borderColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           borderSide: BorderSide(
             color: widget.filled ? borderColor : theme.colorScheme.outline,
           ),
@@ -91,6 +81,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
         ),
         suffixIcon: _buildSuffixIcon(isDark),
+        prefixIcon:
+            Icon(
+              widget.prefixIcon,
+              size: MediaQuery.of(context).size.width * 0.05,
+              color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
+            ) ??
+            null,
       ),
     );
   }
@@ -102,9 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         icon: Icon(
           isHidden ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
           size: MediaQuery.of(context).size.width * 0.05,
-          color: isDark
-              ? Colors.grey.shade400
-              : Colors.grey.shade700, // Couleur de l'icône adaptative
+          color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
         ),
       );
     }
