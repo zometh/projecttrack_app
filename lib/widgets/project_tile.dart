@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../controllers/project_action_controller.dart';
 import '../services/auth_service.dart';
@@ -53,6 +54,7 @@ class _ProjectTileState extends State<ProjectTile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
+                spacing: 7.h,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,29 +76,59 @@ class _ProjectTileState extends State<ProjectTile> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8.h),
+
                   CustomText(
                     text: "Membres de l'équipe",
                     customStyle: CustomTextStyle.secondary,
                     fontSize: 14,
                   ),
-                  SizedBox(height: 10.h),
-                   SizedBox(
-                    height: 40.h,
-                     child: Row(
-                      children: List.generate(
-                        4,
-                        (index) => Transform.translate(
-                          offset: Offset(-12.0 * index, 0),
-                          child: UserAvatar(
-                            imageUrl:
-                                "https://media.gettyimages.com/id/1446629309/photo/argentina-v-australia-round-of-16-fifa-world-cup-qatar-2022.jpg?b=1&s=594x594&w=0&k=20&c=62wT0Z00Y-1qws1eYBSxj_CVcaPHMJJQIVuPkFajQUY=",
-                          ),
-                        ),
-                      ),
-                                     ),
+
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       FutureBuilder(future: FirestoreDb().getProjectMembersImage(project.id),
+                           builder: (_, snapshots){
+                         if(snapshots.connectionState == ConnectionState.waiting){
+                           return loadingComponent;
+                         }
+                         if(snapshots.hasError){
+                           return CustomText(text: snapshots.error.toString());
+                         }
+                         final images = snapshots.data!;
+                         return SizedBox(
+                           height: 40.h,
+                           child: Row(
+                             children: List.generate(
+                               images.length,
+                                   (index) => Transform.translate(
+                                 offset: Offset(-12.0 * index, 0),
+                                 child: UserAvatar(
+                                   imageUrl:
+                                   images[index],
+                                 ),
+                               ),
+                             ),
+                           ),
+                         );
+                           }
+                       ),
+                       CircularStepProgressIndicator(
+                         totalSteps: 100,
+                         currentStep: project.progress,
+                         stepSize: 5,
+                         selectedColor: project.progress < 50 ? Colors.red : Colors.green,
+                         //unselectedColor: Colors.grey[200],
+                         padding: 0,
+                         width: 50,
+                         height: 50,
+                         selectedStepSize: 5,
+                         roundedCap: (_, __) => true,
+
+                         child: Center(child: CustomText(text: "${project.progress}%", fontSize: 9.sp,fontWeight: FontWeight.bold,),),
+                       ),
+                     ],
                    ),
-                  SizedBox(height: 10.h),
+
                   CustomText(
                     text:
                         "Date d'échéance: ${FormatDate().formatToDate(widget.project.createdAt)}",

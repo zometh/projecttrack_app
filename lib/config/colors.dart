@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 const Color kprimary = Color(0xFF4A6FFF);
 const Color ksecondary = Color(0xFFFF6B6B);
 const Color ktertiary = Color(0xFF36D1DC);
-
+const Color kdanger = Color(0xFFCE1C46);
+const Color ksuccess = Color(0xFF28A745);
 const Color kpending = Color(0xFFFFD166);
 const Color kinProgress = Color(0xFF06D6A0);
 const Color kcompleted = Color(0xFF1B9AAA);

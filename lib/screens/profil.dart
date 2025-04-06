@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
+
+import '../models/my_user.dart';
 class Profil extends StatefulWidget {
   const Profil({super.key});
 
@@ -35,7 +37,8 @@ class _ProfilState extends State<Profil> with AutomaticKeepAliveClientMixin<Prof
             if(!snapshot.hasData || snapshot.data == null){
               return Center(child: CustomText(text: "Aucun utilisateur trouvé"),);
             }
-            final user = snapshot.data!;
+            final datas = snapshot.data!.docs.first;
+            final user = MyUser.fromFirestore(datas.data());
 
             return Padding(
               padding: const EdgeInsets.all(8.0),

@@ -2,6 +2,7 @@ import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/enum_textstyle.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/textfield_type.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/register.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/reset_password_page.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/form_validator.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () => Get.to(() => const Register()),
+                      onTap: () => Get.to(() => const ResetPasswordPage()),
                       child: CustomText(
                         text: "Mot de passe oublié ?",
                         color: kprimary,
@@ -127,13 +128,14 @@ class _LoginPageState extends State<LoginPage> {
   login() async {
     if (_key.currentState!.validate()) {
       Get.focusScope!.unfocus();
-      setState(() {
-        _isLoading = true;
-      });
+
       String strEmail = email.text.trim();
 
       String strPassword = password.text.trim();
       try {
+        setState(() {
+          _isLoading = true;
+        });
         AuthController controller = Get.put(AuthController());
         controller.updateLoginValue(strEmail, strPassword);
         await AuthService().signIn().then((value) {
@@ -145,6 +147,10 @@ class _LoginPageState extends State<LoginPage> {
         });
         debugPrint(e.toString());
 
+      }finally{
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }

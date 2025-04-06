@@ -68,5 +68,11 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       showError(message: FormatText.getMessageFromErrorCode(e.code));
   }}
+  Future<void> resetPassword(String email) async{
+    try {
+      await _authInstance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      showError(message: FormatText.getMessageFromErrorCode(e.code));
+    }}
 
 }

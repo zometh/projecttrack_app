@@ -71,7 +71,7 @@ class MemberTile extends StatelessWidget {
                     }, "Suppression d'un membre", "Êtes-vous sûr de vouloir supprimer ce membre ?");
 
                   },
-                  backgroundColor: Colors.red,
+                  backgroundColor: kdanger,
                   foregroundColor: Colors.white,
                   child: const Icon(Icons.delete),
                 ),

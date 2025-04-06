@@ -8,6 +8,9 @@ import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/auth_manager.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/login.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/user_home_page.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/supabase_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/mapping/m_project.dart';
@@ -17,6 +20,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 
+import '../enum/user_role.dart';
 import '../models/project_notif.dart';
 import '../utils/fomat_text.dart';
 import '../utils/notif_service.dart';
@@ -42,7 +46,7 @@ class FirestoreDb {
   ) {
     Query<Map<String, dynamic>> query = _db
         .collection(fProjectName)
-        .where(fMemebersName, arrayContains: userController.getEmail);
+        .where(fMemebersName, arrayContains: FirebaseAuth.instance.currentUser!.email);
     switch (status) {
       case ProjectStatus.pending:
         return _getProjectSnapshots(query, 0);
@@ -77,12 +81,48 @@ class FirestoreDb {
       "email": email,
       "fullName": fullName,
       "imageUrl": imageUrl,
-
+      "blocked": false,
       "role": 2
     };
     await _db.collection(fUsersName).doc(uid).set(infos);
   }
 
+  Stream<List<MyUser>> getAllUsers(){
+    return _db.collection(fUsersName).snapshots().map((snapshot) {
+      List<MyUser> users = [];
+
+      final datas = snapshot.docs.map((doc) {
+        return MyUser.fromFirestore(doc.data());
+      }).toList();
+      for(var data in datas){
+        if(data.role == UserRole.defaultUser){
+          users.add(data);
+        }
+      }
+      return users;
+    });
+  }
+  Future<void> listenStatusChanges() async{
+    _db.collection(fUsersName).where("email", isEqualTo: AuthService().connectedUserMail).snapshots().listen((snapshot) {
+      if(snapshot.docs.isNotEmpty){
+        final data = snapshot.docs.first.data();
+        bool isBlocked = data["blocked"];
+        if(isBlocked){
+          AuthService().signOut().then((onValue) {
+
+            //showError(message: "Votre compte a été bloqué ! Contacter l'administrateur à l'adresse zomethdev@gmail.com");
+          });
+          Get.offAll(AuthManager());
+        }
+      }
+    });
+  }
+  Future<void> updateUserAccountStatus(String email, bool status) async{
+    await _db.collection(fUsersName).where('email', isEqualTo: email).get().then((snapshot) {
+      snapshot.docs.first.reference.update({"blocked": status});
+
+    });
+  }
   Future<void> createProject() async {
     try {
 
@@ -103,6 +143,7 @@ class FirestoreDb {
           {"email": creatorMail, "role": 1},
         ],
         "priority": controller.priority,
+        "progress": 0
       };
       await _db
           .collection(fProjectName)
@@ -136,7 +177,14 @@ class FirestoreDb {
     };
     await documentReference.set(datas);
   }
-  Future<MyUser> getUserByMail(String email) async{
+  Future<bool> isEmailExist(String email) async{
+    final datas = await _db.collection(fUsersName)
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+    return datas.docs.isNotEmpty;
+  }
+  Future<MyUser?> getUserByMail(String email) async{
     final datas = await _db.collection(fUsersName).where('email', isEqualTo: email).limit(1).get();
     final infos = datas.docs.first.data();
 
@@ -245,7 +293,8 @@ class FirestoreDb {
       await documentReference.update({
         'members': FieldValue.arrayRemove([
           {'email': memberMail, 'role': memberRole}
-        ])
+        ]),
+        'membersMail': FieldValue.arrayRemove([memberMail])
       });
       await _db.collection(fTaskName).where('assignedTo', isEqualTo: memberMail)
           .where('projectId', isEqualTo: projectId)
@@ -323,15 +372,13 @@ class FirestoreDb {
 
 
   }
-  Stream<MyUser> getCurrentUser() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCurrentUser() {
     return FirebaseFirestore.instance
         .collection(fUsersName)
         .where("email", isEqualTo: userController.getEmail)
-        .snapshots()
-        .map((snapshots){
-          final datas = snapshots.docs.first.data();
-          return MyUser.fromFirestore(datas);
-    });
+        .snapshots();
+
+
   }
   Future<void> createNotif(String owner)async{
     Project project = controller.currentProject;
@@ -347,7 +394,7 @@ class FirestoreDb {
 
   }
   fetchNotifications(){
-    String email = UserController.to.getEmail;
+    String email = AuthService().connectedUserMail!;
     _db.collection(fNotifName)
     .where("owner", isEqualTo: email)
     .snapshots()
@@ -375,8 +422,8 @@ class FirestoreDb {
   displayNotif(String projectId, ProjectNotif notif) async{
     Project project = await getOneProject(projectId);
     MyUser owner =    userController.getUser;
-    MyUser creator = await getUserByMail(project.creator);
-    String message = "Bonjour ${owner.fullName}, vous avez été ajouté au projet ${project.title} par ${creator.fullName}";
+    MyUser? creator = await getUserByMail(project.creator);
+    String message = "Bonjour ${owner.fullName}, vous avez été ajouté au projet ${project.title} par ${creator!.fullName}";
     await NotifService().showNotifications(
         title: "Nouvelle notification",
         body: message,
@@ -504,5 +551,25 @@ class FirestoreDb {
   Future<void> removeTask(String id) async{
     await _db.collection(fTaskName).doc(id).delete();
     await deleteTaskChats(id);
+  }
+  Future<List<String>> getProjectMembersImage(String projectId) async{
+    List<String> images = [];
+    final datas = await _db.collection(fProjectName).where('id', isEqualTo: projectId).get();
+    final data = datas.docs.first.data();
+    List<Member>? members = (data["members"] as List<dynamic>?)
+        ?.map(
+          (memberData) =>
+          Member.fromFirestore(memberData as Map<String, dynamic>)
+    ).toList();
+    if(members != null){
+      for(var member in members){
+        final datas = await _db.collection(fUsersName).where('email', isEqualTo: member.email).get();
+        final data = datas.docs.first.data();
+        images.add(data["imageUrl"]);
+      }
+    }
+    return images;
+
+
   }
 }

@@ -5,11 +5,24 @@ import 'package:get/get.dart';
 import '../controllers/bottom_nav_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final bool isAdmin;
+  const BottomNavBar({super.key, this.isAdmin = false});
 
   @override
   Widget build(BuildContext context) {
     BottomNavBarController controller = Get.put(BottomNavBarController());
+    List<BottomNavigationBarItem> items = isAdmin ? [
+      buildItem("Accueil", Icons.home),
+      buildItem("Projets", Icons.work),
+      buildItem("Utilisateurs", Icons.people),
+    ] : [
+      buildItem("Accueil", Icons.home),
+      buildItem("Rechercher",  Icons.search),
+      buildItem("Notifications", Icons.notifications),
+      buildItem("Profil", Icons.person),
+
+
+    ];
     return BottomNavigationBar(
       currentIndex: controller.index,
       onTap: (index) => controller.updateIndex(index),
@@ -18,14 +31,7 @@ class BottomNavBar extends StatelessWidget {
       selectedItemColor: kprimary,
       showUnselectedLabels: false,
       type: BottomNavigationBarType.fixed,
-      items: [
-        buildItem("Accueil", Icons.home),
-        buildItem("Rechercher",  Icons.search),
-        buildItem("Notifications", Icons.notifications),
-        buildItem("Profil", Icons.person),
-
-
-      ],
+      items: items,
 
     );
 

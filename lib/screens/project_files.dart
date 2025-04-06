@@ -98,9 +98,9 @@ class _ProjectFilesState extends State<ProjectFiles> {
     );
   }
 
-  // Modifiez votre fonction pickFile
+
   void pickFile() async {
-    // Vérifier les permissions d'abord
+
 
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();

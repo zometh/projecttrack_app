@@ -79,16 +79,16 @@ class _RegisterState extends State<Register> {
             child: Form(
               key: _key,
               child: Column(
-                spacing: 10.h,
-                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 12.h,
+                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-            
+                  SizedBox(height: 45.h,),
                   Center(
                     child: InkWell(
                       onTap: pickImage,
                       child: CircleAvatar(
-                        radius: 55,
+                        radius: 65,
                         backgroundImage:
                             file != null
                                 ? FileImage(file!)

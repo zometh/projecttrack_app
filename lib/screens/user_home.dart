@@ -15,14 +15,14 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class UserHome extends StatefulWidget {
+  const UserHome({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<UserHome> createState() => _UserHomeState();
 }
 
-class _HomeState extends State<Home> with TickerProviderStateMixin {
+class _UserHomeState extends State<UserHome> with TickerProviderStateMixin {
   late TabController _tabController;
 
   List<Widget> projectsTypeView = [

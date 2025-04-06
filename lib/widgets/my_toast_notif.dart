@@ -40,6 +40,7 @@ void showInfos({required String message, String title = "Erreur"}) {
 }
 void showError({required String message, String title = "ERREUR"}) {
   toastification.show(
+
     type: ToastificationType.error,
     style: ToastificationStyle.fillColored,
     title: CustomText(
