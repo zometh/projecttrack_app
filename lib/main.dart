@@ -1,16 +1,21 @@
 import 'package:diop_mouhamed_l3gl_examen/config/theme.dart';
 import 'package:diop_mouhamed_l3gl_examen/firebase_options.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/spalsh_screen.dart';
+import 'package:diop_mouhamed_l3gl_examen/utils/notif_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Permission.accessNotificationPolicy.request();
+  NotifService().initNotifications();
   await dotenv.load(fileName: ".env");
 
   await Supabase.initialize(

@@ -4,14 +4,23 @@ import 'package:diop_mouhamed_l3gl_examen/screens/project_members.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_overview.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_tasks.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/fomat_text.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/custom_dialog.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../controllers/project_action_controller.dart';
+import '../services/auth_service.dart';
+import '../services/firestore_db.dart';
+
 class FullProjectView extends StatefulWidget {
-  final Project project;
-  const FullProjectView({super.key, required this.project});
+  final Project? project;
+  final String? projectId;
+  const FullProjectView({super.key,  this.project, this.projectId});
 
   @override
   State<FullProjectView> createState() => _FullProjectViewState();
@@ -21,28 +30,52 @@ class _FullProjectViewState extends State<FullProjectView>
     with TickerProviderStateMixin {
   late Project project;
   late TabController controller;
-
+  ProjectActionController actionController = Get.put(ProjectActionController());
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    project = widget.project;
+
+      if(widget.projectId != null){
+        getProject();
+      }
+      else{
+        project = widget.project!;
+      }
+
+
+    actionController.updateCurrentProject(project);
+    actionController.updateProjectMembers();
+
     controller = TabController(length: 4, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      ProjectOverview(project: project),
+      ProjectOverview(),
       const ProjectTasks(),
-      const ProjectMembers(),
-      const ProjectFiles(),
+       ProjectMembers(),
+       ProjectFiles(),
     ];
     return DefaultTabController(
       length: controller.length,
       child: Scaffold(
         appBar: AppBar(
-          actions: [Icon(Icons.more_vert)],
+          actions: [
+            if(actionController.isCreator.value) IconButton(onPressed: (){
+              CustomDialog(context: context)
+                  .alertDialogConfirm(
+                      (){
+                        Get.back();
+                        FirestoreDb().removeProject().then((_){
+                          showSuccess(message: "Projet supprimé avec succès !");
+                        });
+                      },
+                  "Supprimer le projet",
+                  "Êtes-vous sûr de vouloir supprimer ce projet ?");
+            },
+                icon:  Icon(Icons.delete, color: Colors.red,))],
           title: Hero(
             tag: project.id,
             child: CustomText(
@@ -78,5 +111,8 @@ class _FullProjectViewState extends State<FullProjectView>
         ),
       ),
     );
+  }
+  getProject()async{
+    project = await FirestoreDb().getOneProject(widget.projectId!);
   }
 }

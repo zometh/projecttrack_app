@@ -1,4 +1,5 @@
 import 'package:diop_mouhamed_l3gl_examen/screens/home.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/home_page.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/login.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/register.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
@@ -25,7 +26,9 @@ class _AuthManagerState extends State<AuthManager> {
         if (!snapshots.hasData) {
           return const  LoginPage();
         }
-        return const Home();
+        return snapshots.data!.emailVerified ?
+             const HomePage() :  loadingComponent;
+
       },
     );
   }

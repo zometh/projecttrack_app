@@ -11,7 +11,9 @@ import 'package:get/get.dart';
 class AuthService {
   final _authInstance = FirebaseAuth.instance;
   final firestoreDb = FirestoreDb();
-  UserCredential? _credential;
+  static UserCredential? _credential;
+  String? get connectedUserMail => _authInstance.currentUser!.email;
+  String? get connectedUid => _authInstance.currentUser!.uid;
   Future<void> signOut() async {
     await _authInstance.signOut();
   }
@@ -46,19 +48,25 @@ class AuthService {
         password: password,
       );
       if (!_credential!.user!.emailVerified) {
+        _credential!.user!.sendEmailVerification();
         signOut();
         showError(
           message:
-              "Vous devez valider votre compte pour pouvoir vous connecter !",
+              "Vous devez valider votre compte pour pouvoir vous connecter !\nVeuillez vérifier votre boite mail.",
         );
-        _credential!.user!.sendEmailVerification();
-        showSuccess(
-          message:
-              "Un autre mail vous de validation vous a été envoyé à votre adresse email.",
-        );
+
+
       }
     } on FirebaseAuthException catch (e) {
       showError(message: FormatText.getMessageFromErrorCode(e.code));
     }
   }
+  Future<void> updatePassword(String password) async{
+
+    try {
+      await _authInstance.currentUser!.updatePassword(password);
+    } on FirebaseAuthException catch (e) {
+      showError(message: FormatText.getMessageFromErrorCode(e.code));
+  }}
+
 }

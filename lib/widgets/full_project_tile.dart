@@ -1,3 +1,4 @@
+import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/enum_textstyle.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/fomat_text.dart';
@@ -6,19 +7,20 @@ import 'package:diop_mouhamed_l3gl_examen/utils/format_project_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/specific_color.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/card_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/project_status_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FullProjectTile extends StatelessWidget {
-  final Project project;
-  const FullProjectTile({super.key, required this.project});
+
+  const FullProjectTile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Project project = ProjectActionController.to.currentProject;
     return Center(
       child: Card(
-        elevation: 8,
+        elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

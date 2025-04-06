@@ -1,5 +1,8 @@
+import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
+import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_add_page.dart';
+import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_floating_button.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_textfield.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/drawer.dart';
@@ -21,16 +24,21 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late TabController _tabController;
+
   List<Widget> projectsTypeView = [
     ProjectViewByStatus(status: ProjectStatus.pending),
     ProjectViewByStatus(status: ProjectStatus.inProgress),
     ProjectViewByStatus(status: ProjectStatus.completed),
     ProjectViewByStatus(status: ProjectStatus.cancelled),
   ];
+  UserController userController = Get.put(UserController());
   @override
   void initState() {
     super.initState();
+
+    userController.updateConnectedUserMail();
     _tabController = TabController(length: 4, vsync: this);
+    FirestoreDb().fetchNotifications();
   }
 
   @override
@@ -41,13 +49,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    print(size.width);
-    print(size.height);
+
+
     return DefaultTabController(
       length: _tabController.length,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          title: Text("PROJECT TRACK",
+          style: GoogleFonts.alata(fontSize: 25.sp, fontWeight: FontWeight.bold)
+          ),
           bottom: TabBar(
             controller: _tabController,
             dividerColor: Colors.transparent,
@@ -66,19 +77,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               Tab(text: "Annulés"),
             ],
           ),
-          title: CustomTextField(
-            prefixIcon: Icons.search,
-            borderRadius: 10,
-            controller: TextEditingController(),
-            hintText: "Rechercher un projet",
-          ),
-          // This ensures proper height for your custom content
-          toolbarHeight: 80, // Adjust as needed
+
+          toolbarHeight: 40, // Adjust as needed
         ),
-        drawer: MyDrawer(),
 
         // drawerDragStartBehavior: DragStartBehavior.start,
         body: TabBarView(
+
           controller: _tabController,
           children: projectsTypeView,
         ),

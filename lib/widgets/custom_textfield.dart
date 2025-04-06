@@ -13,6 +13,8 @@ class CustomTextField extends StatefulWidget {
   final IconData? prefixIcon;
   final double borderRadius;
   final int maxLines;
+  final String? initialValue;
+
   const CustomTextField({
     super.key,
     required this.controller,
@@ -22,6 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.formatter,
     this.filled = true,
     this.prefixIcon,
+    this.initialValue,
     this.borderRadius = 15,  this.maxLines = 1,
   });
 
@@ -48,6 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final hintColor = isDark ? Colors.grey.shade400 : Colors.grey.shade500;
 
     return TextFormField(
+      initialValue: widget.initialValue ?? null,
       maxLines: widget.maxLines,
       controller: widget.controller,
       validator: widget.validator,
@@ -81,13 +85,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
         ),
         suffixIcon: _buildSuffixIcon(isDark),
-        prefixIcon:
-            Icon(
-              widget.prefixIcon,
-              size: MediaQuery.of(context).size.width * 0.05,
-              color: isDark ? Colors.grey.shade400 : Colors.grey.shade700,
-            ) ??
-            null,
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
+
       ),
     );
   }

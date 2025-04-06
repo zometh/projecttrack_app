@@ -12,6 +12,10 @@ class FormatText {
         return "Votre compte est bloqué. Veuillez contacter l'administrateur";
       case "email-already-in-use":
         return "L'adresse email existe déja.";
+      case "weak-password":
+        return "Le mot de passe doit contenir au moins 6 caractères";
+      case "invalid-email":
+        return "L'adresse email est invalide";
       default:
         return "Connexion échouée. Veuillez réssayer plus tard";
     }

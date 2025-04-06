@@ -1,6 +1,10 @@
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
+import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -22,7 +26,17 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
           ),
-          
+          CustomText(text: AuthService().connectedUserMail!),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CustomButton(
+              text: "Se déconnecter",
+              onPressed: () async{
+                Get.back();
+                await AuthService().signOut();
+              },
+            ),
+          ),
         ],
       ),
     );

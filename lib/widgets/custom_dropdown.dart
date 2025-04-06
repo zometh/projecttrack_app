@@ -28,3 +28,31 @@ class PriorityChoice extends StatelessWidget {
     );
   }
 }
+class MemberRoleChoice extends StatelessWidget {
+  const MemberRoleChoice({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> roles = ["Administrateur", "Membre"];
+    return DropdownButtonFormField<int>(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+      ),
+      items:
+      roles
+          .map(
+            (role) => DropdownMenuItem(
+          value: roles.indexOf(role),
+          child: CustomText(text: role),
+        ),
+      )
+          .toList(),
+      onChanged: (value) {
+        int role = value == 0 ? 0 : 2;
+        ProjectActionController.to.updateRole(role);},
+      hint: Text("Sélectionnez le type de membre"),
+    );
+  }
+}
+

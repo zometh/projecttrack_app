@@ -4,49 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/*
-class CustomText extends StatelessWidget {
-  final String text;
-  final double fontSize;
-  Color color;
-  final CustomTextStyle customStyle;
-  final FontWeight fontWeight;
-  final bool adaptColor;
-  CustomText({
-    super.key,
-    required this.text,
-    this.fontSize = 15,
-    this.color = ktextPrimaryLight,
-    this.customStyle = CustomTextStyle.primary,
-    this.fontWeight = FontWeight.normal,
-    this.adaptColor = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (adaptColor) {
-      bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-      color = isDarkMode ? ktextPrimaryDark : ktextPrimaryLight;
-    }
-    return Text(
-      text,
-
-      style:
-          customStyle == CustomTextStyle.primary
-              ? GoogleFonts.poppins(
-                fontSize: fontSize,
-                color: color,
-                fontWeight: fontWeight,
-              )
-              : GoogleFonts.inter(
-                fontSize: fontSize,
-                color: color,
-                fontWeight: fontWeight,
-              ),
-    );
-  }
-}
-*/
 class CustomText extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -68,7 +25,7 @@ class CustomText extends StatelessWidget {
     this.adaptColor = true,
     this.textAlign,
     this.maxLines,
-    this.overflow,
+    this.overflow =  TextOverflow.ellipsis,
   });
 
   @override

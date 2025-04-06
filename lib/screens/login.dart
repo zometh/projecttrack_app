@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () => Get.to(() => const RegisterPage()),
+                      onTap: () => Get.to(() => const Register()),
                       child: CustomText(
                         text: "Mot de passe oublié ?",
                         color: kprimary,
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 14,
                     ),
                     InkWell(
-                      onTap: () => Get.to(() => const RegisterPage()),
+                      onTap: () => Get.to(() => const Register()),
                       child: CustomText(
                         text: "S'inscrire",
                         color: kprimary,
@@ -144,10 +144,7 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
         debugPrint(e.toString());
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
+
       }
     }
   }

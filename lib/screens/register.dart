@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:diop_mouhamed_l3gl_examen/config/image_constant.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/register_controller.dart';
+import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/textfield_type.dart';
+import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/form_validator.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
@@ -18,26 +20,31 @@ import 'package:image_picker/image_picker.dart';
 import '../config/colors.dart';
 import '../enum/enum_textstyle.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class Register extends StatefulWidget {
+  final MyUser? user;
+  const Register({super.key, this.user});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterState extends State<Register> {
+
   late TextEditingController email;
   late TextEditingController fullName;
   late TextEditingController password;
   late TextEditingController passwordConfirm;
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   bool _isLoading = false;
 
   File? file;
+  bool editPassword = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     email = TextEditingController();
     fullName = TextEditingController();
     password = TextEditingController();
@@ -56,7 +63,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("INSCRIPTION"),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
@@ -71,26 +83,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+            
                   Center(
-                    child: CustomText(
-                      text: "INSCRIPTION",
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+                    child: InkWell(
+                      onTap: pickImage,
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundImage:
+                            file != null
+                                ? FileImage(file!)
+                                : AssetImage(kUserDefaultImage),
+                      ),
                     ),
                   ),
-                  Center(
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundImage:
-                          file != null
-                              ? FileImage(file!)
-                              : AssetImage(kUserDefaultImage),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: pickImage,
-                    child: CustomText(text: "Choisir une photo", fontSize: 12),
-                  ),
+
                   CustomTextField(
                     prefixIcon: Icons.person,
                     validator:
@@ -99,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: fullName,
                     hintText: "Nom complet",
                   ),
-                  CustomTextField(
+                 CustomTextField(
                     prefixIcon: Icons.mail,
                     validator:
                         (value) => FormValidator.isValidMail(value!.trim()),
@@ -107,6 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: email,
                     hintText: "Adresse email",
                   ),
+
                   CustomTextField(
                     prefixIcon: Icons.lock,
                     validator:
@@ -115,6 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     hintText: "Mot de passe",
                     type: TextFieldType.password,
                   ),
+                  if(editPassword)
                   CustomTextField(
                     prefixIcon: Icons.lock,
                     validator:
@@ -125,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   _isLoading
                       ? loadingComponent
-                      : CustomButton(text: "S'inscrire", onPressed: signUp),
+                      : CustomButton(text:  "S'inscrire" , onPressed:  signUp ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -186,6 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 message:
                     "Validez votre inscriptions en cliquant sur le lien envoyé à votre adresse email.",
               );
+              Get.back();
             });
           } catch (e) {
             setState(() {

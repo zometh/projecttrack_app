@@ -1,5 +1,6 @@
 import 'package:diop_mouhamed_l3gl_examen/enum/project_priority.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
+import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
 
 class FormatProjectText {
   String getTextStatus(ProjectStatus status) {
@@ -27,6 +28,17 @@ class FormatProjectText {
         return "Haute";
       case ProjectPriority.urgent:
         return "Urgente";
+    }
+  }
+  String getTextMember(UserProjectRole role){
+    switch(role){
+
+      case UserProjectRole.admin:
+        return "Admin";
+      case UserProjectRole.projectLead:
+        return "Créateur";
+      case UserProjectRole.teamMember:
+        return "Membre";
     }
   }
 }

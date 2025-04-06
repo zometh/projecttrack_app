@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 class MyDatePicker extends StatefulWidget {
   DateTime date;
-  final Function(DateTime) onDateChanged; // Nouveau callback
-  
+  final Function(DateTime) onDateChanged;
+  final bool isEndDate;
   MyDatePicker({
     super.key, 
     required this.date, 
-    required this.onDateChanged // Callback obligatoire
+    required this.onDateChanged ,
+    this.isEndDate = false
   });
 
   @override
@@ -25,9 +26,10 @@ class _MyDatePickerState extends State<MyDatePicker> {
   }
   
   _pickDate() async {
+    DateTime now = DateTime.now();
     DateTime? picked = await showDatePicker(
       context: context,
-      firstDate: DateTime.now(),
+      firstDate: widget.isEndDate ? now.add(const Duration(days: 1)) : now,
       lastDate: DateTime(2050),
     );
     

@@ -17,6 +17,7 @@ class Project {
   final List<Member> members;
   final ProjectPriority priority;
   final String creator;
+  final int progress;
 
   Project({
     required this.id,
@@ -30,9 +31,25 @@ class Project {
     required this.members,
     required this.priority,
     required this.creator,
+    this.progress = 0,
   });
+    Project.empty():
+      id = '',
+      title = '',
+      description = '',
+      createdAt = Timestamp.now(),
+      startDate = Timestamp.now(),
+      endDate = Timestamp.now(),
+      status = ProjectStatus.pending,
+      memebersMail = [],
+      members = [],
+      priority = ProjectPriority.low,
+      creator = '',
+          progress = 0
+  ;
   factory Project.fromFirestore(Map<String, dynamic> datas) {
     return Project(
+      progress: datas["progress"],
       creator: datas["creator"],
       id: datas["id"],
       title: datas["title"],
@@ -53,19 +70,44 @@ class Project {
       priority: Mproject.getPriorityByIndex(datas["priority"]),
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "title": title,
+      "description": description,
+      "createdAt": createdAt,
+      "startDate": startDate,
+      "endDate": endDate,
+      "status": status.index,
+      "membersMail": memebersMail,
+      "members": members.map((member) => member.toMap()).toList(),
+      "priority": priority.index,
+      "creator": creator,
+    };
+  }
 }
 
 class Member {
-  final String uid;
+
   final String email;
-  final UserRole role;
-  Member({required this.uid, required this.email, required this.role});
+  final UserProjectRole role;
+  Member({ required this.email, required this.role});
 
   factory Member.fromFirestore(Map<String, dynamic> datas) {
     return Member(
-      uid: datas["uid"],
+
       email: datas["email"],
       role: MUser.getRoleByIndex(datas["role"]),
     );
   }
+  Member.empty():
+      email = '',
+      role = UserProjectRole.teamMember;
+  Map<String, dynamic> toMap() {
+    return {
+      "email": email,
+      "role": role.index,
+    };
+  }
+
 }
