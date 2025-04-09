@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
+import 'package:diop_mouhamed_l3gl_examen/config/image_constant.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/enum_textstyle.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/textfield_type.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/register.dart';
@@ -12,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../controllers/register_controller.dart';
 import '../services/auth_service.dart';
@@ -34,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     email = TextEditingController();
     password = TextEditingController();
+
   }
 
   @override
@@ -58,11 +63,11 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
-                  child: CustomText(
+                  child: Image.asset(kTextLogo) /*CustomText(
                     text: "Project Track",
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                  ),
+                  )*/,
                 ),
                 CustomText(
                   text: "Connectez-vous pour continuer",
@@ -125,6 +130,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
   login() async {
     if (_key.currentState!.validate()) {
       Get.focusScope!.unfocus();
@@ -146,11 +152,12 @@ class _LoginPageState extends State<LoginPage> {
           _isLoading = false;
         });
         debugPrint(e.toString());
-
-      }finally{
-        setState(() {
-          _isLoading = false;
-        });
+      } finally {
+        if(mounted){
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }

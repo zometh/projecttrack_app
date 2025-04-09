@@ -41,6 +41,7 @@ class _ProjectTileState extends State<ProjectTile> {
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
+
       onTap: () => Get.to(() => FullProjectView(project: widget.project)),
       child: Center(
         child: Padding(
@@ -60,15 +61,12 @@ class _ProjectTileState extends State<ProjectTile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Hero(
-                          tag: widget.project.id,
-                          child: CustomText(
-                            text: widget.project.title,
-                            fontSize: 18,
-                            customStyle: CustomTextStyle.primary,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        child: CustomText(
+                          text: widget.project.title,
+                          fontSize: 18,
+                          customStyle: CustomTextStyle.primary,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       CardStatus(

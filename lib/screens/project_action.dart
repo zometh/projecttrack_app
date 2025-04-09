@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
+import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/fomat_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/form_validator.dart';
@@ -17,15 +18,17 @@ import 'package:get/get.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
-class ProjectAddPage extends StatefulWidget {
-  const ProjectAddPage({super.key});
+class ProjectActionPage extends StatefulWidget {
+  final bool isEdit;
+  const ProjectActionPage({super.key, this.isEdit = false});
 
   @override
-  State<ProjectAddPage> createState() => _ProjectAddPageState();
+  State<ProjectActionPage> createState() => _ProjectActionPageState();
 }
 
-class _ProjectAddPageState extends State<ProjectAddPage> {
+class _ProjectActionPageState extends State<ProjectActionPage> {
   bool _isLoading = false;
+  bool get isEdit => widget.isEdit;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   @override
   void initState() {
@@ -37,10 +40,19 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Créer un projet")),
+      appBar: AppBar(title: Text(isEdit ? "Modifier le projet" : "Créer un projet")),
       body: GetBuilder<ProjectActionController>(
+
         init: ProjectActionController(),
         builder: (controller) {
+          if(isEdit){
+            Project project = controller.currentProject;
+            controller.title.value.text = project.title;
+            controller.description.value.text = project.description;
+            //controller.start.value = project.startDate.toDate();
+            //controller.end.value = project.endDate.toDate();
+          }
+
           return SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 20.h),
@@ -52,6 +64,7 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomTextField(
+                      //initialValue: isEdit ? project.title : null,
                       validator:
                           (value) =>
                               FormValidator.isValidField(input: value!.trim()),
@@ -80,6 +93,7 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
                         Row(
                           children: [
                             MyDatePicker(
+
                               date: controller.start.value,
                               onDateChanged: (d) {
                                 setState(() {
@@ -105,6 +119,7 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
                         Row(
                           children: [
                             MyDatePicker(
+
                               date: controller.end.value,
                               onDateChanged:
                                   (d) => setState(() {
@@ -132,7 +147,7 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
                     PriorityChoice(),
                     _isLoading
                         ? loadingComponent
-                        : CustomButton(text: "Créer", onPressed: createProject),
+                        : CustomButton(text: isEdit? "Modifier" : "Créer", onPressed: addOrUpdate),
                   ],
                 ),
               ),
@@ -143,7 +158,7 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
     );
   }
 
-  createProject() async {
+  addOrUpdate() async {
     ProjectActionController controller = Get.put(ProjectActionController());
     if (_key.currentState!.validate()) {
       final start = controller.start.value;
@@ -155,10 +170,17 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
             setState(() {
               _isLoading = true;
             });
-            await FirestoreDb().createProject().then((onValue) {
-              showSuccess(message: "Projet crée avec succès !");
-              controller.resetValue();
+            await FirestoreDb().createOrUpdate(isEdit: isEdit).then((onValue){
+              showSuccess(message: isEdit ? "Projet modifié avec succès !" : "Projet créé avec succès !");
               Get.back();
+              controller.resetValue();
+
+            });
+            await controller.updateCurrentProjectInfo().then((onValue){
+              /*showSuccess(message: isEdit ? "Projet modifié avec succès !" : "Projet créé avec succès !");
+              Get.back();
+              controller.resetValue();*/
+
             });
           } catch (e) {
             setState(() {
@@ -166,9 +188,11 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
             });
             debugPrint(e.toString());
           } finally {
-            setState(() {
-              _isLoading = false;
-            });
+            if(mounted){
+              setState(() {
+                _isLoading = false;
+              });
+            }
           }
         } else {
           showError(message: "Veuillez choisir une priorité !");
@@ -183,4 +207,5 @@ class _ProjectAddPageState extends State<ProjectAddPage> {
       showError(message: "Veuillez remplir correctement le formulaire !");
     }
   }
+
 }

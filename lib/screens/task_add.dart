@@ -43,7 +43,7 @@ class _TaskAddState extends State<TaskAdd> {
         title: Text("Ajouter une tâche"),
       ),
       body: GetBuilder<ProjectActionController>(
-        init: ProjectActionController(),
+        //init: ProjectActionController(),
         builder: (controller) {
           return SingleChildScrollView(
             child: Padding(

@@ -21,9 +21,7 @@ class NotificationTile extends StatelessWidget {
             return loadingComponent;
           }
           if(!snapshots.hasData || snapshots.data == null){
-            return Center(
-              child: CustomText(text: "Aucune information disponible"),
-            );
+            return SizedBox(height: 0,);
           }
           final project = snapshots.data;
           return InkWell(

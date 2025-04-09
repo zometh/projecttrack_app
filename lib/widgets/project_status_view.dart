@@ -5,6 +5,7 @@ import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/not_found_view.dart';
+import 'package:diop_mouhamed_l3gl_examen/widgets/project_list_view.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/project_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,20 +39,7 @@ class ProjectViewByStatus extends StatelessWidget {
             return Project.fromFirestore(data);
           }).toList();
 
-          return Padding(
-            padding:  EdgeInsets.only(top: 8.0),
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 5.w),
-              // scrollDirection: Axis.horizontal,
-              itemCount: projects.length,
-
-              itemBuilder: (_, index) {
-                Project project = projects[index];
-                return ProjectTile(project: project);
-              },
-              separatorBuilder: (_, index) => SizedBox(height: 3.h),
-            ),
-          );
+          return ProjectListView(projects: projects);
         },
       );
 

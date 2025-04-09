@@ -27,7 +27,7 @@ class _MemberBottomSheetState extends State<MemberBottomSheet> {
       builder: (controller) {
         Project project = controller.currentProject;
         TextEditingController searchController = controller.searchController.value;
-        List<Member> members = project.members.where((member) => member.role == UserProjectRole.teamMember).toList();
+        List<Member> members = project.members.where((member) => member.role != UserProjectRole.projectLead).toList();
         List<Member> filteredMembers = members.where((member) => member.email.toLowerCase().contains(searchController.text.toLowerCase())).toList();
 
         return SizedBox(

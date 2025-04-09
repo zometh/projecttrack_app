@@ -5,6 +5,7 @@ import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../controllers/project_action_controller.dart';
 import '../enum/project_status.dart';
 import '../services/firestore_db.dart';
 import 'card_status.dart';
@@ -66,8 +67,10 @@ class _TaskBottomSheetState extends State<TaskBottomSheet> {
               setState(() {
                 _isLoading = true;
               });
+
               await FirestoreDb().updateTaskProgress(taskId: widget.task.id, progress: currentProgress.toInt())
                   .then((onValue){
+
                 Get.back();
                 showSuccess(message: "Status mis à jour avec succès");
               });

@@ -7,7 +7,9 @@ class MyFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(onPressed: onTap,
+    return FloatingActionButton(
+      heroTag: ValueKey("add-project"),
+      onPressed: onTap,
     child: Icon(Icons.add),
     );
   }

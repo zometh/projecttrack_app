@@ -13,6 +13,7 @@ import 'package:diop_mouhamed_l3gl_examen/widgets/task_chats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 
 import '../models/task.dart';
 import '../services/firestore_db.dart';
@@ -43,6 +44,7 @@ class _TaskTileState extends State<TaskTile> {
   }
   @override
   Widget build(BuildContext context) {
+    ProjectActionController actionController = Get.put(ProjectActionController());
     String taskAssignedTo = widget.task.assignedTo;
     String creator = ProjectActionController.to.currentProject.creator;
     String connectedUserMail = UserController.to.getEmail;
@@ -114,7 +116,7 @@ class _TaskTileState extends State<TaskTile> {
                           child: TaskChats(taskId: widget.task.id),
                         ),
 
-                        Row(
+                        if(actionController.isUser) Row(
                           children: [
                             Expanded(
                               child: CustomTextField(controller: controller,
@@ -159,6 +161,7 @@ class _TaskTileState extends State<TaskTile> {
                 if(creator == connectedUserMail)CustomSlidableAction(
                   onPressed: (_) async{
                     await FirestoreDb().removeTask(widget.task.id);
+                    await FirestoreDb().updateProjectProgression();
 
                   },
                   backgroundColor: Colors.red,

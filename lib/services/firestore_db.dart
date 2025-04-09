@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
+import 'package:diop_mouhamed_l3gl_examen/controllers/search_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
@@ -22,6 +23,7 @@ import 'package:path/path.dart' as path;
 
 import '../enum/user_role.dart';
 import '../models/project_notif.dart';
+import '../models/task.dart';
 import '../utils/fomat_text.dart';
 import '../utils/notif_service.dart';
 
@@ -68,6 +70,43 @@ class FirestoreDb {
         .orderBy('createdAt', descending: true)
         .snapshots();
   }
+  Future<void> checkProjectDate()async{
+    final now = Timestamp.now();
+    _db.collection(fProjectName).where(fMemebersName, arrayContains: FirebaseAuth.instance.currentUser!.email)
+        .where("endDate", isEqualTo: now)
+        .snapshots()
+        .map((snapshot) async{
+          for (var doc in snapshot.docs){
+            doc.reference.update({"status": 2,
+            });
+            updateProjectProgress(doc.id, 100);
+            final data = doc.data();
+            if(data["endDate"] != Timestamp.now()){
+              String message = "Bonjour, la date limite du projet ${data["title"]} est aujourd'hui";
+              await NotifService().showNotifications(
+                  title: "Nouvelle inportante",
+                  body: message,
+                  payload: controller.currentProject.id
+              );
+            }
+
+          }
+    });
+
+  }
+
+  Stream<List<Project>> getAllUsersProjects() {
+    return _db.collection(fProjectName).where(fMemebersName, arrayContains: FirebaseAuth.instance.currentUser!.email).snapshots().map((snapshot) {
+
+      List<Project> projects = snapshot.docs.map((doc) {
+        return Project.fromFirestore(doc.data());
+      }).toList();
+
+      return projects;
+
+    });
+  }
+
 
   Future<void> addUser(
     String uid,
@@ -102,6 +141,34 @@ class FirestoreDb {
       return users;
     });
   }
+  Future<void> updateProjectProgression() async{
+    ProjectActionController controller = Get.put(ProjectActionController());
+    projectId = controller.currentProject.id;
+    List<Task> tasks = await getProjectTasksList(projectId);
+    int totalTasks = tasks.length;
+    int completedTasks = 0;
+    if(totalTasks != 0){
+      for(var task in tasks){
+        if(task.status == ProjectStatus.completed) {
+          completedTasks++;
+        }}
+    }
+    int progress = totalTasks == 0 ? 0 : (completedTasks / totalTasks * 100).toInt();
+    if(progress == 100){
+      await updateProjectStatus(status: ProjectStatus.completed);
+    }
+    await updateProjectProgress(projectId, progress);
+    controller.updateCurrentProjectInfo();
+
+  }
+  Future<List<Task>> getProjectTasksList(String projectId) async{
+    final datas = await _db.collection(fTaskName).where("projectId", isEqualTo: projectId).get();
+    List<Task> tasks = [];
+    for(var data in datas.docs){
+      tasks.add(Task.fromFirestore(data.data()));
+    }
+    return tasks;
+  }
   Future<void> listenStatusChanges() async{
     _db.collection(fUsersName).where("email", isEqualTo: AuthService().connectedUserMail).snapshots().listen((snapshot) {
       if(snapshot.docs.isNotEmpty){
@@ -123,19 +190,36 @@ class FirestoreDb {
 
     });
   }
-  Future<void> createProject() async {
+  Stream<List<Project>> getAllProjects(){
+    return _db.collection(fProjectName).snapshots().map((snapshot) {
+      List<Project> projects = snapshot.docs.map((doc) {
+        return Project.fromFirestore(doc.data());
+      }).toList();
+
+      return projects;
+    });
+  }
+  Future<void> createOrUpdate({bool isEdit = false}) async {
     try {
 
 
       String creatorMail = userController.getEmail;
       DocumentReference document = _db.collection(fProjectName).doc();
-      final datas = {
+
+      final datas = isEdit ? {
+        "startDate": controller.startDate,
+        "endDate": controller.endDate,
+        "title": controller.pTitle,
+        "description": controller.pDescription,
+        "priority": controller.priority,
+      } :
+      {
         "id": document.id,
         "creator": creatorMail,
         "title": controller.pTitle,
         "description": controller.pDescription,
         "createdAt": Timestamp.fromDate(DateTime.now()),
-        "startDate": controller.endDate,
+        "startDate": controller.startDate,
         "endDate": controller.endDate,
         "status": 0,
         "membersMail": [creatorMail],
@@ -145,11 +229,16 @@ class FirestoreDb {
         "priority": controller.priority,
         "progress": 0
       };
-      await _db
-          .collection(fProjectName)
-          .doc(document.id)
-          .set(datas)
-          .then((onValue) => controller.resetValue());
+      final collection = _db.collection(fProjectName);
+      if(isEdit){
+        await collection.doc(controller.currentProject.id).update(datas);
+      }
+      else{
+        await collection
+            .doc(document.id)
+            .set(datas);
+      }
+
     } catch (e) {
       showError(
         message: "Une erreur est survenue. Veuillez réssayer plus tard !",
@@ -394,7 +483,7 @@ class FirestoreDb {
 
   }
   fetchNotifications(){
-    String email = AuthService().connectedUserMail!;
+    String email = FirebaseAuth.instance.currentUser!.email!;
     _db.collection(fNotifName)
     .where("owner", isEqualTo: email)
     .snapshots()
@@ -413,6 +502,7 @@ class FirestoreDb {
       }
     });
   }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> getNotifications() {
     String email = userController.getEmail;
     return _db.collection(fNotifName)
@@ -445,6 +535,13 @@ class FirestoreDb {
 
     });
 
+  }
+  Future<void> deleteProjectNotifications(String projectId) async{
+    await _db.collection(fNotifName).where("projectId", isEqualTo: projectId).get().then((snapshot){
+      for(DocumentSnapshot ds in snapshot.docs){
+        ds.reference.delete();
+      }
+    });
   }
   Future<void> deleteProjectFile(String projectId) async{
     await _db.collection(fFilesName).where('projectId', isEqualTo: projectId).get().then((snapshot){
@@ -488,14 +585,14 @@ class FirestoreDb {
     infos['fullName'] = fullName;
     await _db.collection(fUsersName).doc(uid).update(infos);
   }
-  updateProjectProgress(int progress) async{
-    projectId = controller.currentProject.id;
+  updateProjectProgress(String projectId, int progress) async{
+
     await _db.collection(fProjectName).doc(projectId).update({
       "progress": progress
     });
   }
-  Future<void> updateProjectStatus(ProjectStatus status) async{
-    projectId = controller.currentProject.id;
+  Future<void> updateProjectStatus({required ProjectStatus status, String? id}) async{
+    projectId = id ?? controller.currentProject.id;
     if(status == ProjectStatus.completed){
       await _db.collection(fProjectName).doc(projectId).update({
         "status": status.index,
@@ -511,6 +608,10 @@ class FirestoreDb {
     await _db.collection(fProjectName).doc(projectId).update({
       "status": status.index
     });
+    if(status != ProjectStatus.completed){
+      await updateProjectProgression();
+    }
+    await controller.updateCurrentProjectInfo();
   }
   Future<void> updateTaskProgress({required String taskId,int? progress, ProjectStatus? status}) async{
     if(progress != null){
@@ -519,6 +620,7 @@ class FirestoreDb {
           "progress": progress,
           "status": Mproject.getStatus(status!)
         });
+        await updateProjectProgression();
       }
       else if(progress >= 0 && progress <= 100){
         await _db.collection(fTaskName).doc(taskId).update({
@@ -546,6 +648,7 @@ class FirestoreDb {
         });
       }
     }
+    await updateProjectProgression();
   }
 
   Future<void> removeTask(String id) async{

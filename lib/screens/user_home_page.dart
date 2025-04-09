@@ -20,8 +20,10 @@ class _UserHomePageState extends State<UserHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirestoreDb().listenStatusChanges();
+
+
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -45,4 +47,5 @@ class _UserHomePageState extends State<UserHomePage> {
       }
     );
   }
+
 }

@@ -32,7 +32,14 @@ class AuthService {
       await _credential!.user!.sendEmailVerification();
 
       await firestoreDb.addUser(_credential!.user!.uid, email, fullName, image);
-      await signOut();
+      await signOut().
+      then((value) {
+        showSuccess(
+          message:
+          "Validez votre inscriptions en cliquant sur le lien envoyé à votre adresse email.",
+        );
+        Get.back();
+      });
     } on FirebaseAuthException catch (e) {
       showError(message: FormatText.getMessageFromErrorCode(e.code));
     }

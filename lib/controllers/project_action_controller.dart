@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
+import 'package:diop_mouhamed_l3gl_examen/utils/mapping/m_project.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/mapping/m_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class ProjectActionController extends GetxController {
   static ProjectActionController get to => Get.find();
   late Rx<TextEditingController> email ;
   late Rx<TextEditingController> searchController;
+  bool get isUser => currentProject.memebersMail.contains(AuthService().connectedUserMail);
   Project get currentProject => project.value;
   Member get currentMember => member.value;
   RxBool isCreator = false.obs;
@@ -42,6 +44,12 @@ class ProjectActionController extends GetxController {
   }
   updateCurrentProject(Project newProject){
     project.value= newProject;
+    priority = Mproject.getPriority(project.value.priority);
+    update();
+  }
+  Future<void> updateCurrentProjectInfo()async{
+    project.value = await FirestoreDb().getOneProject(currentProject.id);
+    priority = Mproject.getPriority(project.value.priority);
     update();
   }
   updateMember(Member newMember){
@@ -76,14 +84,16 @@ class ProjectActionController extends GetxController {
     update();
   }
 
-  resetValue() {
+  resetValue({bool includeProject = false}) {
     title.value = TextEditingController();
     description.value = TextEditingController();
     start.value = DateTime.now();
     end.value = DateTime.now();
     priority = null;
-    project.value = Project.empty();
-    member.value = Member.empty();
+    if(includeProject){
+      project.value = Project.empty();
+      member.value = Member.empty();
+    }
     update();
   }
 

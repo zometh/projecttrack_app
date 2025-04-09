@@ -1,4 +1,5 @@
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/project_action.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_files.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_members.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_overview.dart';
@@ -63,30 +64,58 @@ class _FullProjectViewState extends State<FullProjectView>
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            if(actionController.isCreator.value) IconButton(onPressed: (){
-              CustomDialog(context: context)
-                  .alertDialogConfirm(
-                      (){
-                        Get.back();
-                        FirestoreDb().removeProject().then((_){
-                          showSuccess(message: "Projet supprimé avec succès !");
-                        });
-                      },
-                  "Supprimer le projet",
-                  "Êtes-vous sûr de vouloir supprimer ce projet ?");
-            },
-                icon:  Icon(Icons.delete, color: Colors.red,))],
-          title: Hero(
-            tag: project.id,
-            child: CustomText(
-              text: FormatText.formatTitle(project.title),
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
-              color: Colors.white,
-            ),
-          ),
+            if(actionController.isCreator.value) Row(
+              children: [
+               PopupMenuButton<int>(
+
+                 itemBuilder: (_) {
+                   return [
+                     PopupMenuItem(
+                       value: 1,
+                       
+                       child: TextButton.icon(onPressed: (){
+                         Get.back();
+                         Get.to(() => ProjectActionPage(isEdit: true,));
+                       }, icon: Icon(Icons.edit), label: CustomText(text: "Modifier"),),
+
+                     ),
+                     PopupMenuItem(
+                       value: 1,
+                       child: TextButton.icon(onPressed: (){
+                         Get.back();
+                         CustomDialog(context: context)
+                             .alertDialogConfirm(
+                                 (){
+                               Get.back();
+                               FirestoreDb().removeProject().then((_){
+                                 showSuccess(message: "Projet supprimé avec succès !");
+                               });
+                             },
+                             "Supprimer le projet",
+                             "Êtes-vous sûr de vouloir supprimer ce projet ?");
+                       },
+                           label: CustomText(text: "Supprimer"),
+                           icon:  Icon(Icons.delete, color: Colors.red,))
+
+                     ),
+                   ];
+                 },
+
+               ),
+
+              ],
+            )],
+          title: GetBuilder<ProjectActionController>(
+          builder: (controller) => CustomText(
+    text: FormatText.formatTitle(controller.currentProject.title),
+    overflow: TextOverflow.ellipsis,
+    fontWeight: FontWeight.bold,
+    fontSize: 17,
+    color: Colors.white,
+    ))
+          ,
           bottom: TabBar(
+
             controller: controller,
             dividerColor: Colors.transparent,
             indicatorAnimation: TabIndicatorAnimation.elastic,
@@ -105,14 +134,16 @@ class _FullProjectViewState extends State<FullProjectView>
             ],
           ),
         ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 3.w),
-          child: TabBarView(controller: controller, children: pages),
-        ),
+        body:  Padding(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      child: TabBarView(controller: controller, children: pages),
+    ),
       ),
     );
   }
+
   getProject()async{
+
     project = await FirestoreDb().getOneProject(widget.projectId!);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:diop_mouhamed_l3gl_examen/config/theme.dart';
 import 'package:diop_mouhamed_l3gl_examen/firebase_options.dart';
+import 'package:diop_mouhamed_l3gl_examen/screens/auth_manager.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/spalsh_screen.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/notif_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,9 +49,10 @@ class MyApp extends StatelessWidget {
           defaultTransition: Transition.cupertino,
           theme: ThemeConfig.lightTheme,
           darkTheme: ThemeConfig.darkTheme,
-          home: const SpalshScreen(),
+          home: const AuthManager(),
         ),
       ),
     );
   }
+
 }

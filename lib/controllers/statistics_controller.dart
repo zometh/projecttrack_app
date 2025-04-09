@@ -7,7 +7,6 @@ class StatisticsController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   RxBool isLoading = true.obs;
 
-
   int totalProjects = 0;
   int totalUsers = 0;
   int totalTasks = 0;
@@ -20,25 +19,31 @@ class StatisticsController extends GetxController {
   int cancelledProjects = 0;
 
 
+  int pendingTasks = 0;
+  int inProgressTasks = 0;
+  int completedTasks = 0;
+  int cancelledTasks = 0;
+double completionTaskRate = 0;
 
-
+  int activeUsers = 0;
+  int inactiveUsers = 0;
+  double activeUsersRate = 0.0;
+  double inactiveUsersRate = 0.0;
 
   @override
   void onInit() {
     super.onInit();
-     fetchDashboardData();
+    fetchDashboardData();
   }
 
   Future<void> refreshData() async {
     isLoading.value = true;
-
     await Future.delayed(const Duration(milliseconds: 800));
-await fetchDashboardData();
+    await fetchDashboardData();
     isLoading.value = false;
     showInfos(message: "Données actualisées avec succès");
     update();
   }
-
 
   Future<void> fetchDashboardData() async {
     try {
@@ -71,27 +76,58 @@ await fetchDashboardData();
         }
       }
 
-      QuerySnapshot usersSnapshot = await _firestore.collection('users').get();
+    
+      QuerySnapshot usersSnapshot = await _firestore.collection('users').where('role', isEqualTo: 2).get();
       totalUsers = usersSnapshot.docs.length;
 
+      activeUsers = 0;
+      inactiveUsers = 0;
 
+      for (var doc in usersSnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+        final isBlocked = data['blocked'];
+
+        if (isBlocked) {
+          inactiveUsers++;
+        } else {
+          activeUsers++;
+        }
+      }
+
+      activeUsersRate = totalUsers > 0 ? (activeUsers / totalUsers) * 100 : 0;
+      inactiveUsersRate = totalUsers > 0 ? (inactiveUsers / totalUsers) * 100 : 0;
 
 
       QuerySnapshot tasksSnapshot = await _firestore.collection('tasks').get();
       totalTasks = tasksSnapshot.docs.length;
 
-      int completedTasks = 0;
+      pendingTasks = 0;
+      inProgressTasks = 0;
+      completedTasks = 0;
+      cancelledTasks = 0;
+
       for (var doc in tasksSnapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
-        final isCompleted = data['status'] == 2;
+        final status = data['status'] ?? 0;
 
-        if (isCompleted) {
-          completedTasks++;
+        switch (status) {
+          case 0:
+            pendingTasks++;
+            break;
+          case 1:
+            inProgressTasks++;
+            break;
+          case 2:
+            completedTasks++;
+            break;
+          case 3:
+            cancelledTasks++;
+            break;
         }
       }
 
-      completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
+      completionRate = completedProjects / totalProjects * 100;
+       completionTaskRate = completedTasks / totalTasks * 100;
 
       isLoading.value = false;
       update();
@@ -101,4 +137,6 @@ await fetchDashboardData();
       update();
     }
   }
+
+
 }

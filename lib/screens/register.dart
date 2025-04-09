@@ -122,7 +122,7 @@ class _RegisterState extends State<Register> {
                     hintText: "Mot de passe",
                     type: TextFieldType.password,
                   ),
-                  if(editPassword)
+                 // if(editPassword)
                   CustomTextField(
                     prefixIcon: Icons.lock,
                     validator:
@@ -189,13 +189,7 @@ class _RegisterState extends State<Register> {
               strFullName,
               file!,
             );
-            await AuthService().signUp().then((value) {
-              showSuccess(
-                message:
-                    "Validez votre inscriptions en cliquant sur le lien envoyé à votre adresse email.",
-              );
-              Get.back();
-            });
+            await AuthService().signUp();
           } catch (e) {
             setState(() {
               _isLoading = false;

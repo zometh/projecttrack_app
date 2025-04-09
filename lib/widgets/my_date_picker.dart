@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 class MyDatePicker extends StatefulWidget {
+  final DateTime? initialDate;
   DateTime date;
   final Function(DateTime) onDateChanged;
   final bool isEndDate;
@@ -9,7 +10,8 @@ class MyDatePicker extends StatefulWidget {
     super.key, 
     required this.date, 
     required this.onDateChanged ,
-    this.isEndDate = false
+    this.isEndDate = false,
+    this.initialDate
   });
 
   @override
@@ -26,7 +28,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
   }
   
   _pickDate() async {
-    DateTime now = DateTime.now();
+    DateTime now = widget.initialDate ?? DateTime.now();
     DateTime? picked = await showDatePicker(
       context: context,
       firstDate: widget.isEndDate ? now.add(const Duration(days: 1)) : now,

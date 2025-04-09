@@ -52,7 +52,7 @@ class _ProjectFilesState extends State<ProjectFiles> {
             /*_isUploading
                 ? loadingComponent
                 : */
-            SizedBox(
+            if(controller.isUser) SizedBox(
               height: 45.h,
               width: double.infinity,
               child: CustomButton(

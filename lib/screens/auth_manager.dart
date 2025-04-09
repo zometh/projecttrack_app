@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:diop_mouhamed_l3gl_examen/enum/user_role.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/admin_home_page.dart';
@@ -12,6 +14,7 @@ import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AuthManager extends StatefulWidget {
   const AuthManager({super.key});
@@ -21,6 +24,12 @@ class AuthManager extends StatefulWidget {
 }
 
 class _AuthManagerState extends State<AuthManager> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestPermission();
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -66,5 +75,23 @@ class _AuthManagerState extends State<AuthManager> {
 
       },
     );
+  }
+  Future<void> requestPermission() async {
+    if (!await Permission.notification.isGranted) {
+      await Permission.notification.request();
+    }
+
+    if (Platform.isAndroid) {
+      if (!await Permission.storage.isGranted) {
+        await Permission.storage.request();
+      }
+      if (!await Permission.manageExternalStorage.isGranted) {
+        await Permission.manageExternalStorage.request();
+      }
+    } else {
+      if (!await Permission.storage.isGranted) {
+        await Permission.storage.request();
+      }
+    }
   }
 }

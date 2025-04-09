@@ -13,7 +13,7 @@ class CustomTextField extends StatefulWidget {
   final IconData? prefixIcon;
   final double borderRadius;
   final int maxLines;
-  final String? initialValue;
+
 
   const CustomTextField({
     super.key,
@@ -24,7 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.formatter,
     this.filled = true,
     this.prefixIcon,
-    this.initialValue,
+
     this.borderRadius = 15,  this.maxLines = 1,
   });
 
@@ -51,7 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final hintColor = isDark ? Colors.grey.shade400 : Colors.grey.shade500;
 
     return TextFormField(
-      initialValue: widget.initialValue ?? null,
+
       maxLines: widget.maxLines,
       controller: widget.controller,
       validator: widget.validator,
