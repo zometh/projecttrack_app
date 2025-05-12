@@ -100,8 +100,6 @@ class _ProjectFilesState extends State<ProjectFiles> {
 
 
   void pickFile() async {
-
-
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
 
