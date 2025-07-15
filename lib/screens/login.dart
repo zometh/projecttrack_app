@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:diop_mouhamed_l3gl_examen/config/image_constant.dart';
@@ -14,8 +13,6 @@ import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../controllers/register_controller.dart';
 import '../services/auth_service.dart';

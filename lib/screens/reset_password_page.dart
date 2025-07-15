@@ -1,4 +1,3 @@
-import 'package:diop_mouhamed_l3gl_examen/enum/textfield_type.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';

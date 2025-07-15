@@ -12,8 +12,6 @@ import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-import '../controllers/project_action_controller.dart';
-import '../services/auth_service.dart';
 import '../services/firestore_db.dart';
 import 'loading.dart';
 

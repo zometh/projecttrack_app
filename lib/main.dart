@@ -1,7 +1,6 @@
 import 'package:diop_mouhamed_l3gl_examen/config/theme.dart';
 import 'package:diop_mouhamed_l3gl_examen/firebase_options.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/auth_manager.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/spalsh_screen.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/notif_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +17,14 @@ void main() async {
   await Permission.accessNotificationPolicy.request();
   NotifService().initNotifications();
   await dotenv.load(fileName: ".env");
-
   await Supabase.initialize(
     url: dotenv.env["SUPABASE_URL"]!,
     anonKey: dotenv.env["ANON_KEY"]!,
   );
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-          (_) => runApp(const MyApp())
-  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -54,5 +52,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
 }

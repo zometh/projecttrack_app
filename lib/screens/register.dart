@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:diop_mouhamed_l3gl_examen/config/image_constant.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/register_controller.dart';
-import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/textfield_type.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';

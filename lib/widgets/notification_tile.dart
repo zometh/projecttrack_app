@@ -25,7 +25,7 @@ class NotificationTile extends StatelessWidget {
           }
           final project = snapshots.data;
           return InkWell(
-            onTap: () => Get.to(() => FullProjectView(project: project!)),
+            onTap: () => Get.to(() => FullProjectView(project: project)),
             child: Card(
               margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               child: Padding(

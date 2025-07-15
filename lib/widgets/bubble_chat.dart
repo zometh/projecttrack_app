@@ -1,4 +1,3 @@
-import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
@@ -7,7 +6,6 @@ import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/format_date.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_dialog.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,12 +49,14 @@ class BubbleChat extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      BubbleSpecialOne(
-                        isSender: isSender,
-                        text: chat.message,
-                        color: isSender ? kprimary : Color(0xFFE8E8EE),
-                        textStyle: GoogleFonts.montserrat(
-                            color: isSender ? Colors.white : Colors.black),
+                      Flexible(
+                        child: BubbleSpecialOne(
+                          isSender: isSender,
+                          text: chat.message,
+                          color: isSender ? kprimary : Color(0xFFE8E8EE),
+                          textStyle: GoogleFonts.montserrat(
+                              color: isSender ? Colors.white : Colors.black),
+                        ),
                       ),
                       CircleAvatar(
                         backgroundImage: NetworkImage(user!.imageUrl),
@@ -81,14 +81,16 @@ class BubbleChat extends StatelessWidget {
 
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(user!.imageUrl),
+                        backgroundImage: NetworkImage(user.imageUrl),
                       ),
-                      BubbleSpecialOne(
-                        isSender: isSender,
-                        text: chat.message,
-                        color: isSender ? kprimary : Color(0xFFE8E8EE),
-                        textStyle: GoogleFonts.montserrat(
-                            color: isSender ? Colors.white : Colors.black),
+                      Flexible(
+                        child: BubbleSpecialOne(
+                          isSender: isSender,
+                          text: chat.message,
+                          color: isSender ? kprimary : Color(0xFFE8E8EE),
+                          textStyle: GoogleFonts.montserrat(
+                              color: isSender ? Colors.white : Colors.black),
+                        ),
                       ),
                     ],
                   ),

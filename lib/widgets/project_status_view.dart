@@ -1,15 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
-import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/not_found_view.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/project_list_view.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/project_tile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProjectViewByStatus extends StatelessWidget {
 

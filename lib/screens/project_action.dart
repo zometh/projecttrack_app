@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
-import 'package:diop_mouhamed_l3gl_examen/utils/fomat_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/form_validator.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/format_date.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';

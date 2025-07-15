@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import 'custom_textfield.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({super.key});
@@ -18,8 +17,6 @@ class CustomSearchBar extends StatelessWidget {
 
     final borderColor = isDark ? Colors.grey.shade800 : Colors.white;
 
-    final focusedBorderColor =
-    isDark ? theme.colorScheme.primary : Colors.grey.shade400;
 
     final hintColor = isDark ? Colors.grey.shade400 : Colors.grey.shade500;
     return GetBuilder<SearchProjectController>(

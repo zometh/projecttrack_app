@@ -2,7 +2,6 @@ import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_priority.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
-import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/format_project_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/specific_color.dart';
 import 'package:flutter/material.dart';

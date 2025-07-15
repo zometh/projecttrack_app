@@ -3,21 +3,16 @@ import 'dart:io';
 import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project_file.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/default_file_viewer.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/pdf_viewer.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/file_tile.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/not_found_view.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ProjectFiles extends StatefulWidget {
 
@@ -42,7 +37,6 @@ class _ProjectFilesState extends State<ProjectFiles> {
   @override
   Widget build(BuildContext context) {
 
-    final projectId = project.id;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),

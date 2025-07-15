@@ -5,14 +5,12 @@ import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/card_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../controllers/project_action_controller.dart';
-import '../enum/enum_textstyle.dart';
 import '../models/project.dart';
 
 class StatsTile extends StatelessWidget {

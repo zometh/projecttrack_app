@@ -1,8 +1,5 @@
-import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
-import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/add_member.dart';
-import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_floating_button.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
@@ -20,7 +17,6 @@ class ProjectMembers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProjectActionController controller = Get.put(ProjectActionController());
-    Project project = controller.currentProject;
     return Scaffold(
       body: StreamBuilder(
         stream: FirestoreDb().getProjectMembers(),

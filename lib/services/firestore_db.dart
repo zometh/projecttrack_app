@@ -1,17 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
-import 'package:diop_mouhamed_l3gl_examen/controllers/search_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/role.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/auth_manager.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/login.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/user_home_page.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/supabase_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/mapping/m_project.dart';

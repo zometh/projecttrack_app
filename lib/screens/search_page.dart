@@ -1,11 +1,8 @@
 import 'package:diop_mouhamed_l3gl_examen/controllers/search_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/mapping/m_project.dart';
-import 'package:diop_mouhamed_l3gl_examen/utils/notif_service.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/custom_button.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_search_bar.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/custom_textfield.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/project_list_view.dart';
 import 'package:flutter/material.dart';

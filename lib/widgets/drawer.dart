@@ -15,7 +15,7 @@ class MyDrawer extends StatelessWidget {
       child: Column(
         children: [
           DrawerHeader(
-            child: Container(
+            child: SizedBox(
               height: 170.h,
               width: double.infinity,
               child: CircleAvatar(

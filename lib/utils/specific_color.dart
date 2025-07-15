@@ -36,7 +36,6 @@ Color getColorbyRole(UserProjectRole role){
       return kadmin;
     case UserProjectRole.projectLead:
       return kcreateur;
-      throw UnimplementedError();
     case UserProjectRole.teamMember:
       return kmembre;
   }

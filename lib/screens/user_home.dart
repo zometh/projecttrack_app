@@ -1,19 +1,13 @@
 import 'package:diop_mouhamed_l3gl_examen/config/image_constant.dart';
-import 'package:diop_mouhamed_l3gl_examen/controllers/project_action_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/enum/project_status.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/project_action.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/custom_floating_button.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/custom_textfield.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/drawer.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/project_status_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserHome extends StatefulWidget {

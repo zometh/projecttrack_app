@@ -1,8 +1,5 @@
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ThemeConfig {
@@ -27,7 +24,7 @@ class ThemeConfig {
         fontWeight: FontWeight.bold,
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: kcardLight,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -54,7 +51,7 @@ class ThemeConfig {
         fontWeight: FontWeight.bold,
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: kcardDark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),

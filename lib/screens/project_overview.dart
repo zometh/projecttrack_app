@@ -1,4 +1,3 @@
-import 'package:diop_mouhamed_l3gl_examen/models/project.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/full_project_tile.dart';
 import 'package:flutter/material.dart';
 

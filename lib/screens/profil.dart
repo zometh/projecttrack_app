@@ -1,6 +1,5 @@
 import 'package:diop_mouhamed_l3gl_examen/config/colors.dart';
 import 'package:diop_mouhamed_l3gl_examen/controllers/user_controller.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/register.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/user_info_edit.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';

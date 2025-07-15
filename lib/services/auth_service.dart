@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:diop_mouhamed_l3gl_examen/controllers/register_controller.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
-import 'package:diop_mouhamed_l3gl_examen/services/supabase_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/utils/fomat_text.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:firebase_auth/firebase_auth.dart';

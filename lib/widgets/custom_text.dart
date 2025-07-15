@@ -15,7 +15,7 @@ class CustomText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow? overflow;
 
-  CustomText({
+ const CustomText({
     super.key,
     required this.text,
     this.fontSize = 15,

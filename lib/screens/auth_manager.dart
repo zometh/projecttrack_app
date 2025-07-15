@@ -3,17 +3,14 @@ import 'dart:io';
 import 'package:diop_mouhamed_l3gl_examen/enum/user_role.dart';
 import 'package:diop_mouhamed_l3gl_examen/models/my_user.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/admin_home_page.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/user_home.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/user_home_page.dart';
 import 'package:diop_mouhamed_l3gl_examen/screens/login.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/register.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/auth_service.dart';
 import 'package:diop_mouhamed_l3gl_examen/services/firestore_db.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/loading.dart';
 import 'package:diop_mouhamed_l3gl_examen/widgets/my_toast_notif.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AuthManager extends StatefulWidget {

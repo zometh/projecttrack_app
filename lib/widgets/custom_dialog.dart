@@ -1,9 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:diop_mouhamed_l3gl_examen/enum/enum_textstyle.dart';
-import 'package:diop_mouhamed_l3gl_examen/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomDialog{

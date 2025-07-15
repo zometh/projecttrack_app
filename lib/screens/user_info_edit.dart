@@ -111,7 +111,7 @@ class _UserInfoEditState extends State<UserInfoEdit> {
   editInfos() async{
     String _fullName = username.text.trim();
     String _password = password.text.trim();
-    String _passwordConfirm = passwordConfirm.text.trim();
+    passwordConfirm.text.trim();
     String successMessage = "Vos informations ont été modifiées avec succès !";
     if(key.currentState!.validate()){
       try{

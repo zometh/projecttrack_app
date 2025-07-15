@@ -1,13 +1,10 @@
-import 'dart:convert';
 
 import 'package:diop_mouhamed_l3gl_examen/controllers/bottom_nav_controller.dart';
-import 'package:diop_mouhamed_l3gl_examen/screens/full_project_view.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 
 class NotifService{
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
-  bool _isInitialized = false;
+  final bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
 
 
